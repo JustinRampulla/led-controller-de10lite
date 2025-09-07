@@ -1,0 +1,65 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: 9000; -- 	IN     Switches
+0001: 9820; -- 	OUT    LEDs
+0002: 1035; -- 	STORE  Pattern
+0003: 101A; --     STORE  InitialPattern ; Store a copy of pattern
+0004: 800B; --     CALL FindLowestSetBit  ; Call subroutine to find lowest set bit
+0005: 6FFE; --     ADDI -2
+0006: 3800; --     JPOS InvalidSwitchNum ; infinite loop if switchCount is greater than 2
+0007: 0835; --     LOAD Pattern
+0008: 181A; --     ADD InitialPattern ; Since original pattern got shifted to all 0s so initialize pattern
+0009: 1035; --     STORE Pattern
+000A: 281E; --     JUMP Left ; Entering LED back and forth loop
+000B: B800; --     LOADI 0           ; Initialize SwitchCount
+000C: 101B; --     STORE SwitchCount
+000D: 0835; --     LOAD Pattern 
+000E: 4018; --     JZERO Done ; If all zero then done
+000F: 481C; --     AND Mask            ; Mask least significant bit
+0010: 4014; --     JZERO Skip         ; If the bit is 1, return
+0011: 081B; --     LOAD SwitchCount
+0012: 6801; --     ADDI 1           ; Increment SwitchCount
+0013: 101B; --     STORE SwitchCount
+0014: 0835; --     LOAD Pattern
+0015: 6011; --     SHIFT -1         ; Shift right
+0016: 1035; --     STORE Pattern  ; Update TempInput
+0017: 280D; --     JUMP CheckBit     ; Repeat process
+0018: 081B; --     LOAD SwitchCount ; Load final result into AC
+0019: 8800; --     RETURN
+001A: 0000; -- InitialPattern: DW 0
+001B: 0000; -- SwitchCount: DW 0
+001C: 0001; -- Mask: DW 1
+001D: FFFF; -- ErrorMask: DW &HFFFF
+001E: 8030; -- 	CALL   Delay
+001F: 0835; -- 	LOAD   Pattern
+0020: 4837; -- 	AND    Bit9         ; bit mask
+0021: 3827; -- 	JPOS   Right        ; bit9 is 1; go right
+0022: 0835; -- 	LOAD   Pattern
+0023: 6001; -- 	SHIFT  1
+0024: 1035; -- 	STORE  Pattern
+0025: 9820; -- 	OUT    LEDs
+0026: 281E; -- 	JUMP   Left
+0027: 8030; -- 	CALL   Delay
+0028: 0835; -- 	LOAD   Pattern
+0029: 4836; -- 	AND    Bit0         ; bit mask
+002A: 381E; -- 	JPOS   Left         ; bit0 is 1; go left
+002B: 0835; -- 	LOAD   Pattern
+002C: 6011; -- 	SHIFT  -1
+002D: 1035; -- 	STORE  Pattern
+002E: 9820; -- 	OUT    LEDs
+002F: 2827; -- 	JUMP   Right
+0030: 9802; -- 	OUT    Timer
+0031: 9002; -- 	IN     Timer
+0032: 6FFB; -- 	ADDI   -5
+0033: 3031; -- 	JNEG   WaitingLoop
+0034: 8800; -- 	RETURN
+0035: 0000; -- Pattern:   DW 0
+0036: 0001; -- Bit0:      DW &B0000000001
+0037: 0200; -- Bit9:      DW &B1000000000
+[0038..07FF] : 0000; -- [empty memory]
+END;

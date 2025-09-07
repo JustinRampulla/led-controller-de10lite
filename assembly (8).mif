@@ -1,0 +1,16 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: 9000; -- 	IN Switches
+0001: 1004; --     Store Pattern
+0002: 9801; --     Out LEDs
+0003: 2800; --     jump loop
+0004: 0000; -- Pattern:   DW &B0000000000
+0005: 0001; -- Bit0:      DW &B0000000001
+0006: 0200; -- Bit9:      DW &B1000000000
+[0007..07FF] : 0000; -- [empty memory]
+END;

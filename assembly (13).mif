@@ -1,0 +1,47 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: 0823; -- 	load Brightness
+0001: 6FF6; --     addi -10
+0002: 400F; --     JZERO Wave2
+0003: 0823; --     load Brightness
+0004: 6801; --     addi 1
+0005: 1023; --     Store Brightness
+0006: 9000; --     in Switches
+0007: 1022; --     store Pattern
+0008: 0823; --     load Brightness
+0009: 600A; --     shift 10
+000A: 1822; --     add Pattern
+000B: 9801; --     out LEDs
+000C: 1021; --     store debug
+000D: 801C; --     call Delay
+000E: 2800; --     Jump Wave1
+000F: 0823; -- 	load Brightness
+0010: 4000; --     JZERO Wave1
+0011: 6FFF; --     addi -1
+0012: 1023; --     store Brightness
+0013: 9000; --     in Switches
+0014: 1022; --     store Pattern
+0015: 0823; --     load Brightness
+0016: 600A; --     shift 10
+0017: 1822; --     add Pattern
+0018: 9801; --     out LEDs
+0019: 1021; --     store debug
+001A: 801C; --     call Delay
+001B: 280F; --     jump Wave2
+001C: 9802; -- 	OUT    Timer
+001D: 9002; -- 	IN     Timer
+001E: 6FFF; -- 	ADDI   -1
+001F: 301D; -- 	JNEG   WaitingLoop
+0020: 8800; -- 	RETURN
+0021: 0000; -- debug: DW
+0022: 0000; -- Pattern:	   DW &B0000000000
+0023: 0000; -- Brightness:   DW &B0000
+0024: 0001; -- Bit0:      DW &B0000000001
+0025: 0200; -- Bit9:      DW &B1000000000
+[0026..07FF] : 0000; -- [empty memory]
+END;
